@@ -50,6 +50,7 @@
   <!-- Modal Structure for Waitlist Form -->
   <div class="modal-overlay" id="waitlistModal" style="display:none;">
     <div class="modal-content">
+      <button class="modal-close" id="modalCloseBtn" style="display:none;" aria-label="Close">&#10005;</button>
       <div id="modalFormSection">
         <h2 class="modal-heading">Early Access</h2>
         <div class="modal-subheading">Studio-grade high fashion visuals, generated in just minutes.</div>
@@ -125,8 +126,9 @@
         </form>
       </div>
       <div class="modal-success" id="modalSuccess" style="display:none;">
-        <span class="modal-success-heading">Thank You! We will reach out to you soon.</span>
-        <button class="modal-close" id="modalCloseBtn" style="display:none;" aria-label="Close">&#10005;</button>
+        <div class="modal-success-content">
+          <span class="modal-success-message">Thank You! We will reach out to you soon.</span>
+        </div>
       </div>
     </div>
   </div>

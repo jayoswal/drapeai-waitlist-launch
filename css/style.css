@@ -289,6 +289,24 @@ body {
   min-height: 340px;
   /* Ensure vertical centering for all screens */
 }
+.modal-success-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  min-height: 340px;
+}
+.modal-success-message {
+  color: #43423e;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
 .modal-success-heading {
   display: block;
   color: #43423e;
@@ -340,6 +358,15 @@ body {
     justify-content: center;
     flex-direction: column;
     font-size: 0.9rem;
+  }
+  .modal-success-content {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+  }
+  .modal-success-message {
+    font-size: 0.9rem;
+    padding: 0;
   }
   .modal-success-heading {
     font-size: 0.9rem;

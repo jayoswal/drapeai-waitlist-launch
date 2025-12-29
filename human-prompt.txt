@@ -90,3 +90,4 @@ TODO: tracking, referring, google tag etc
 TODO: loader spinner
 TODO: scroll hint guide
 TODO: onload scroll a bit
+TODO: optimize code
