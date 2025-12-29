@@ -67,14 +67,17 @@ reduce the size of the placeholder texts, and add padding inside the modal
 
 the sucess modal should have a height and the text align center and left
 
---------------
-favicon.ico:1  GET http://localhost:8000/favicon.ico 404 (File not found)
 
-todo from other 2 old project
+Now at the footer, I want to add 'Contact Us' hyperlink with dotted underline, color: #868686, and font: Plus+Jakarta+Sans
+on clicking it should open a modal with cross out button.
+Content of the modal will be an email and phone/WhatsApp number only.
+The 'Contact Us' should be small and look solid and at sticky footer, font size should be preferrably small but should increase proportionaly according to view port.
+Implement and I will tell u if any changes needed.
+--------------
+add little shadow (very little) to the button
 
 
 python3 -m http.server 8000
-
 node generate-images-js.js
 
 TODO: afte success close , should the button text change to current queue number
