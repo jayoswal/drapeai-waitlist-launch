@@ -37,6 +37,7 @@ Now below the slider we add tagline of the DrapeAI which is 'Studio Grade High F
 This will be ceneterd & responsive as well with words wrapping onto next line 
 font color: #43423e
 font: strictly use - Plus+Jakarta+Sans
+Place at someplace and set a size to begin with, we will adjust it.
 --------------
 favicon.ico:1  GET http://localhost:8000/favicon.ico 404 (File not found)
 
@@ -46,3 +47,11 @@ todo from other 2 old project
 python3 -m http.server 8000
 
 node generate-images-js.js
+
+TODO: contanct us
+TODO: popup for collecing data
+TODO: card sizing and items inside it
+TODO: send data
+TODO: fetch queue number
+TODO: Comment the code with scope to make changes
+TODO: tracking, referring, google tag etc
