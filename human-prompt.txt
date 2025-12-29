@@ -38,6 +38,21 @@ This will be ceneterd & responsive as well with words wrapping onto next line
 font color: #43423e
 font: strictly use - Plus+Jakarta+Sans
 Place at someplace and set a size to begin with, we will adjust it.
+
+
+The number 54 (from the button will be repplaced to fetch the number from datasource, right now leave it hardocded 54)
+Now on clicking the button, a popup model should appear on the screen centered horizontal and vertical, the modal should be responsive as well.
+All text inside the modal should be Plus+Jakarta+Sans
+The purpose of the modal is to collect email & mobile number of users,
+there will be
+1. Heading: Early Access , color: #43423e
+2. Sub heading: Studio-grade high fashion visuals, generated in just minutes. color: '#868686'
+3. Enter email field (email field)
+4. Enter mobile number field, the field has country flag selection drop down with default as India, users just have to enter mobile number in the field (numeric field)
+5. Submit button with label: 'Join the Waitlist '
+The submit button should validate email and number for mobile number
+6. Upon successful sending, a message Thank You! we will reach out to you soon.
+For now mimic successful sending, later on we will integrate sending the data to dataources
 --------------
 favicon.ico:1  GET http://localhost:8000/favicon.ico 404 (File not found)
 
@@ -49,7 +64,7 @@ python3 -m http.server 8000
 node generate-images-js.js
 
 TODO: contanct us
-TODO: popup for collecing data
+TODO: popup for collecing data, email, number, useragent
 TODO: card sizing and items inside it
 TODO: send data
 TODO: fetch queue number
