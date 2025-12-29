@@ -39,6 +39,14 @@ const snap = new Snap({
 });
 window.snap = snap;
 
+// Enable mouse wheel to control the slider directionally (using Snap's built-in wheel prop)
+snap.updateProps({
+  wheel: true,
+  wheelSpeed: 20, // adjust for natural feel
+  followWheel: false,
+  wheelThrottle: 100,
+  wheelAxis: 'x',
+});
 
 snap.on('update', () => {
   // Responsive 3D effect: more dramatic on small screens
@@ -55,6 +63,18 @@ snap.on('update', () => {
     const rotateY = progress * rotation;
     element.style.transform = `translateX(${coord + xOffset}px) translateZ(${zOffset}px) rotateY(${rotateY}deg)`;
   });
+});
+
+// Fade out scroll hint after 5 seconds
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const hint = document.getElementById('scrollHint');
+    if (hint) {
+      hint.style.opacity = '0';
+      hint.style.transition = 'opacity 1s';
+      setTimeout(() => { hint.style.display = 'none'; }, 1000);
+    }
+  }, 3000);
 });
 
 carousel.classList.add('ready');
