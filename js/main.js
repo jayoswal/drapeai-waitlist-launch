@@ -27,7 +27,7 @@ const snap = new Snap({
   grabCursor: true,
   centered: true,
   loop: true,
-  gap: 10,
+  gap: 3,
   freemode: true
 });
 
