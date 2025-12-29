@@ -1,0 +1,22 @@
+index.html:1 Access to script at 'file:///Users/jayoswal/Documents/DrapeAI/Frontend-Waitlist/drapeai-waitlist-launch/js/main.js' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-extension, chrome-untrusted, data, http, https, isolated-app.Understand this error. index.html:15  GET file:///Users/jayoswal/Documents/DrapeAI/Frontend-Waitlist/drapeai-waitlist-launch/js/main.js net::ERR_FAILED
+
+
+ALso check if # uses anything to make the slider smooth or anything extra and we are not doing that please do it exactly like the reference code
+
+
+the height of the imahes should be same throughtout, with images fit (no etra bars at top or bottom) and the aspect ratio as original image
+
+
+---
+at around 500px when the viewport increases, the height also increases drastically huge, keep the max height a bit reduced
+
+
+
+favicon.ico:1  GET http://localhost:8000/favicon.ico 404 (File not found)
+
+todo from other 2 old project
+
+
+python3 -m http.server 8000
+
+node generate-images-js.js

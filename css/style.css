@@ -1,0 +1,55 @@
+/* DrapeAI Landing Page - Mobile First CSS */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', Arial, sans-serif;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f6fa;
+}
+
+.carousel {
+  --size: max(30vw, 30vh);
+  position: fixed;
+  top: 40%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  height: var(--size);
+  perspective: calc(var(--size) * 5.55);
+  transform-style: preserve-3d;
+  opacity: 0;
+  transition: opacity 0.25s linear;
+}
+
+.carousel.ready {
+  opacity: 1;
+}
+
+.slide {
+  position: absolute;
+  border-radius: 0px;
+  overflow: visible;
+  box-shadow: none;
+  background: transparent;
+}
+
+.slide img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 70vw;
+  max-height: 70vh;
+}
