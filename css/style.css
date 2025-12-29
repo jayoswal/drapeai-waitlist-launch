@@ -108,3 +108,18 @@ body {
     font-size: 28px;
   }
 }
+
+/* Tagline styles */
+.tagline {
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  color: #43423e;
+  font-size: clamp(14px, 2vw, 24px);
+  font-weight: 600;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: clamp(0px, 88vw, 52vh);
+  max-width: 90vw;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  word-break: break-word;
+}

@@ -27,8 +27,16 @@ tell me what was before and what u changed it to?
 SVG position according to viewport we want this,
 approx before around 540 something: the logo should be litle up
 then approx around 640 something: the logo should be little down
+slightly
 
 also tell me whats the latest adjustment did for this.
+
+
+
+Now below the slider we add tagline of the DrapeAI which is 'Studio Grade High Fashion Photoshoot Generated in Just Minutes'
+This will be ceneterd & responsive as well with words wrapping onto next line 
+font color: #43423e
+font: strictly use - Plus+Jakarta+Sans
 --------------
 favicon.ico:1  GET http://localhost:8000/favicon.ico 404 (File not found)
 
