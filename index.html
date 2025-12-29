@@ -13,8 +13,23 @@
   <link rel="icon" type="image/png" sizes="192x192" href="favicons/android-chrome-192x192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="favicons/android-chrome-512x512.png">
   <link rel="shortcut icon" href="favicons/favicon.ico">
+  <link rel="preload" href="AtAero-Medium.otf" as="font" type="font/otf" crossorigin>
+  <style>
+    @font-face {
+      font-family: 'At Aero';
+      src: url('AtAero-Medium.otf') format('opentype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
 </head>
 <body>
+  <!-- Logo Section -->
+  <div class="logo-bar">
+    <img src="DRAPEAI-LOGO-SVG.svg" alt="DrapeAI Logo" class="logo-svg" />
+    <span class="logo-text">DrapeAI</span>
+  </div>
   <!-- Hero Slider Section -->
   <div class="carousel" id="carousel">
     <!-- Slides will be injected here by JS -->

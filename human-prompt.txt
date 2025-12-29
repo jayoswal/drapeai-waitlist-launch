@@ -18,6 +18,17 @@ this should be logo SVG <-4px space between-> logo text
 and the size of the svg should be equal to the height of the letter D in the Logo text
 Place both at top 10% and we will adjust from there
 size start with something and it will be dynamic according to viewport.
+
+
+can u reduce the just the svg size a bit (just svg indivually, the starting size)
+tell me what was before and what u changed it to?
+
+
+SVG position according to viewport we want this,
+approx before around 540 something: the logo should be litle up
+then approx around 640 something: the logo should be little down
+
+also tell me whats the latest adjustment did for this.
 --------------
 favicon.ico:1  GET http://localhost:8000/favicon.ico 404 (File not found)
 
