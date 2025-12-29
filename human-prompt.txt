@@ -7,11 +7,18 @@ ALso check if # uses anything to make the slider smooth or anything extra and we
 the height of the images should be same throughtout, with images fit (no etra bars at top or bottom) and the aspect ratio as original image
 
 
----
+
 at around 500px when the viewport increases, the height also increases drastically huge, keep the max height a bit reduced
 
 
 
+Now above the slider we will add out logo  svg - placed at 'DRAPEAI-LOGO-SVG.svg'
+and the logo text 'DrapeAI' font At Aero Medium placed at 'AtAero-Medium.otf' and font color: '#868686'
+this should be logo SVG <-4px space between-> logo text
+and the size of the svg should be equal to the height of the letter D in the Logo text
+Place both at top 10% and we will adjust from there
+size start with something and it will be dynamic according to viewport.
+--------------
 favicon.ico:1  GET http://localhost:8000/favicon.ico 404 (File not found)
 
 todo from other 2 old project
