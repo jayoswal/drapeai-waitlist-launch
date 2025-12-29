@@ -53,6 +53,20 @@ there will be
 The submit button should validate email and number for mobile number
 6. Upon successful sending, a message Thank You! we will reach out to you soon.
 For now mimic successful sending, later on we will integrate sending the data to dataources
+
+Add margin and padding to the card, right now its sticking to the edges (especiall mobile view)
+left-align the heading and the subheading.
+add all the countries in the drop down along with their contry code.
+
+and the success message should be just the success message (remove the heading and sub heading from there)
+it should be heading and color #43423e , left aligned as well.
+And after success the modal should auto close after 10 seconds (also show a cross out button top right at this stage only)
+
+
+reduce the size of the placeholder texts, and add padding inside the modal
+
+the sucess modal should have a height and the text align center and left
+
 --------------
 favicon.ico:1  GET http://localhost:8000/favicon.ico 404 (File not found)
 
@@ -63,10 +77,16 @@ python3 -m http.server 8000
 
 node generate-images-js.js
 
+TODO: afte success close , should the button text change to current queue number
+TODO: failure case for datasource external
+TODO: scroll to glide and recenter image
+TODO:? glowing the logo
 TODO: contanct us
 TODO: popup for collecing data, email, number, useragent
-TODO: card sizing and items inside it
 TODO: send data
 TODO: fetch queue number
 TODO: Comment the code with scope to make changes
 TODO: tracking, referring, google tag etc
+TODO: loader spinner
+TODO: scroll hint guide
+TODO: onload scroll a bit

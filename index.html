@@ -47,7 +47,91 @@
       </button>
     </div>
   </div>
+  <!-- Modal Structure for Waitlist Form -->
+  <div class="modal-overlay" id="waitlistModal" style="display:none;">
+    <div class="modal-content">
+      <div id="modalFormSection">
+        <h2 class="modal-heading">Early Access</h2>
+        <div class="modal-subheading">Studio-grade high fashion visuals, generated in just minutes.</div>
+        <form id="waitlistForm" autocomplete="off">
+          <input type="email" class="modal-input" id="modalEmail" placeholder="Enter your email" required />
+          <div class="modal-phone-group">
+            <select class="modal-country" id="modalCountry">
+              <option value="IN" selected>🇮🇳 +91</option>
+              <option value="US">🇺🇸 +1</option>
+              <option value="GB">🇬🇧 +44</option>
+              <option value="CA">🇨🇦 +1</option>
+              <option value="AU">🇦🇺 +61</option>
+              <option value="SG">🇸🇬 +65</option>
+              <option value="DE">🇩🇪 +49</option>
+              <option value="FR">🇫🇷 +33</option>
+              <option value="IT">🇮🇹 +39</option>
+              <option value="ES">🇪🇸 +34</option>
+              <option value="CN">🇨🇳 +86</option>
+              <option value="JP">🇯🇵 +81</option>
+              <option value="BR">🇧🇷 +55</option>
+              <option value="ZA">🇿🇦 +27</option>
+              <option value="RU">🇷🇺 +7</option>
+              <option value="MX">🇲🇽 +52</option>
+              <option value="AE">🇦🇪 +971</option>
+              <option value="KR">🇰🇷 +82</option>
+              <option value="SA">🇸🇦 +966</option>
+              <option value="ID">🇮🇩 +62</option>
+              <option value="PK">🇵🇰 +92</option>
+              <option value="BD">🇧🇩 +880</option>
+              <option value="NG">🇳🇬 +234</option>
+              <option value="EG">🇪🇬 +20</option>
+              <option value="TR">🇹🇷 +90</option>
+              <option value="TH">🇹🇭 +66</option>
+              <option value="MY">🇲🇾 +60</option>
+              <option value="PH">🇵🇭 +63</option>
+              <option value="VN">🇻🇳 +84</option>
+              <option value="UA">🇺🇦 +380</option>
+              <option value="PL">🇵🇱 +48</option>
+              <option value="AR">🇦🇷 +54</option>
+              <option value="CO">🇨🇴 +57</option>
+              <option value="CL">🇨🇱 +56</option>
+              <option value="NZ">🇳🇿 +64</option>
+              <option value="SE">🇸🇪 +46</option>
+              <option value="NO">🇳🇴 +47</option>
+              <option value="FI">🇫🇮 +358</option>
+              <option value="DK">🇩🇰 +45</option>
+              <option value="IE">🇮🇪 +353</option>
+              <option value="CH">🇨🇭 +41</option>
+              <option value="BE">🇧🇪 +32</option>
+              <option value="NL">🇳🇱 +31</option>
+              <option value="AT">🇦🇹 +43</option>
+              <option value="GR">🇬🇷 +30</option>
+              <option value="PT">🇵🇹 +351</option>
+              <option value="CZ">🇨🇿 +420</option>
+              <option value="HU">🇭🇺 +36</option>
+              <option value="RO">🇷🇴 +40</option>
+              <option value="SK">🇸🇰 +421</option>
+              <option value="BG">🇧🇬 +359</option>
+              <option value="HR">🇭🇷 +385</option>
+              <option value="SI">🇸🇮 +386</option>
+              <option value="LT">🇱🇹 +370</option>
+              <option value="LV">🇱🇻 +371</option>
+              <option value="EE">🇪🇪 +372</option>
+              <option value="LU">🇱🇺 +352</option>
+              <option value="IS">🇮🇸 +354</option>
+              <option value="MT">🇲🇹 +356</option>
+              <option value="CY">🇨🇾 +357</option>
+              <option value="LI">🇱🇮 +423</option>
+            </select>
+            <input type="tel" class="modal-input" id="modalPhone" placeholder="Enter mobile number" pattern="[0-9]{10,15}" required />
+          </div>
+          <button type="submit" class="modal-submit">Join the Waitlist</button>
+        </form>
+      </div>
+      <div class="modal-success" id="modalSuccess" style="display:none;">
+        <span class="modal-success-heading">Thank You! We will reach out to you soon.</span>
+        <button class="modal-close" id="modalCloseBtn" style="display:none;" aria-label="Close">&#10005;</button>
+      </div>
+    </div>
+  </div>
   <script src="assets/images/images.js"></script>
   <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/modal.js"></script>
 </body>
 </html>
