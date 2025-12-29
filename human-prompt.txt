@@ -73,24 +73,33 @@ on clicking it should open a modal with cross out button.
 Content of the modal will be an email and phone/WhatsApp number only.
 The 'Contact Us' should be small and look solid and at sticky footer, font size should be preferrably small but should increase proportionaly according to view port.
 Implement and I will tell u if any changes needed.
---------------
+
 add little shadow (very little) to the button
+
+Camera
+Shirt
+Watch
+Sparkles
+Palette
+Scissors
+PersonStanding
+They are sourced from the lucide-react icon library
 
 
 python3 -m http.server 8000
 node generate-images-js.js
-
-TODO: afte success close , should the button text change to current queue number
+------------
+TODO: after success close , should the button text change to current queue number
 TODO: failure case for datasource external
-TODO: scroll to glide
-TODO: popup for collecing data, email, number, useragent
 TODO: send data
 TODO: fetch queue number
-TODO: Comment the code with scope to make changes
-TODO: tracking, referring, google tag etc
-TODO: loader spinner
-TODO: scroll hint guide
+
+TODO: collecing data - email, number, useragent, utm?
+TODO: Google tracking
+TODO: UTM
+
 TODO: onload scroll a bit =====
+
+TODO: Comment the code with scope to make changes
 TODO: optimize code
-TODO: friction
 https://vevetjs.com/docs/Snap/props
