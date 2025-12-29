@@ -4,7 +4,7 @@ index.html:1 Access to script at 'file:///Users/jayoswal/Documents/DrapeAI/Front
 ALso check if # uses anything to make the slider smooth or anything extra and we are not doing that please do it exactly like the reference code
 
 
-the height of the imahes should be same throughtout, with images fit (no etra bars at top or bottom) and the aspect ratio as original image
+the height of the images should be same throughtout, with images fit (no etra bars at top or bottom) and the aspect ratio as original image
 
 
 ---
