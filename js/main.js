@@ -32,8 +32,10 @@ const snap = new Snap({
 });
 
 snap.on('update', () => {
-  const depth = 200;
-  const rotation = 20;
+  // Responsive 3D effect: more dramatic on small screens
+  const isSmall = window.innerWidth < 600;
+  const depth = isSmall ? 320 : 200;
+  const rotation = isSmall ? 36 : 20;
   const scale = 1 / (180 / rotation);
   const halfAngle = (rotation * Math.PI) / 180 / 2;
 
