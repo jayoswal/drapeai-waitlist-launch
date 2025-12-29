@@ -82,9 +82,7 @@ node generate-images-js.js
 
 TODO: afte success close , should the button text change to current queue number
 TODO: failure case for datasource external
-TODO: scroll to glide and recenter image
-TODO:? glowing the logo
-TODO: contanct us
+TODO: scroll to glide
 TODO: popup for collecing data, email, number, useragent
 TODO: send data
 TODO: fetch queue number
@@ -92,5 +90,7 @@ TODO: Comment the code with scope to make changes
 TODO: tracking, referring, google tag etc
 TODO: loader spinner
 TODO: scroll hint guide
-TODO: onload scroll a bit
+TODO: onload scroll a bit =====
 TODO: optimize code
+TODO: friction
+https://vevetjs.com/docs/Snap/props

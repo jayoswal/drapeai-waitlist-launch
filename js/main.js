@@ -14,7 +14,7 @@ imageFilenames.forEach(filename => {
   const img = document.createElement('img');
   img.src = `assets/images/${filename}`;
   img.alt = filename;
-  img.onerror = function() {
+  img.onerror = function () {
     this.style.display = 'none';
   };
   slide.appendChild(img);
@@ -28,8 +28,17 @@ const snap = new Snap({
   centered: true,
   loop: true,
   gap: 3,
-  freemode: true
+  freemode: false,
+  slideToScroll: 1,
+  centered: true,
+  lerp: 0.1,
+  friction: 0.1,
+//   friction: 1,
+//   lerp: 1,
+//   edgeFriction: 1
 });
+window.snap = snap;
+
 
 snap.on('update', () => {
   // Responsive 3D effect: more dramatic on small screens
