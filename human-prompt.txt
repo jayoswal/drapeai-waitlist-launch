@@ -120,6 +120,11 @@ DELETE FROM waitlist_number;
 DELETE FROM visit_details;
 DELETE FROM submission_details;
 ------------------------
+Now I have a s3 bucket 'drapeai-wailist-launch-db' I want to copy the wailist.db (I am at the file apth itself) file there how do I do that through ec2 connected ssh?
+add it in the document as well
+
+
+----------------
 TODO: after success close , should the button text change to current queue number
 TODO: failure case for datasource external
 TODO: send data
