@@ -88,7 +88,38 @@ They are sourced from the lucide-react icon library
 
 python3 -m http.server 8000
 node generate-images-js.js
-------------
+
+------------------------
+for every visit I want to generate visit_id
+
+UTM: from URL
+source
+medium
+referrer
+along with
+visit_id:
+
+email,number,user-agent,ip,geo-location: from: the card, along with visit_id
+
+current_waitlist number field
+
+also 
+
+Now suggest me some databse to choose from (high speed, lightweight) and how we will architect this.
+
+
+
+-- SQLite
+SELECT * FROM waitlist_number;
+
+SELECT * FROM visit_details;
+
+SELECT * FROM submission_details;
+
+DELETE FROM waitlist_number;
+DELETE FROM visit_details;
+DELETE FROM submission_details;
+------------------------
 TODO: after success close , should the button text change to current queue number
 TODO: failure case for datasource external
 TODO: send data
@@ -103,3 +134,4 @@ TODO: onload scroll a bit =====
 TODO: Comment the code with scope to make changes
 TODO: optimize code
 https://vevetjs.com/docs/Snap/props
+

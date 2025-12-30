@@ -439,6 +439,20 @@ body {
   border-bottom: 1.5px solid #43423e;
 }
 
+.version-tag {
+  position: absolute;
+  left: 12px;
+  bottom: 8px;
+  font-size: 11px;
+  color: #888;
+  letter-spacing: 0.5px;
+  font-family: 'Plus Jakarta Sans', 'At Aero', Arial, sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 2;
+}
+
 /* Contact Modal Styles */
 .contact-modal-content {
   max-width: 320px;

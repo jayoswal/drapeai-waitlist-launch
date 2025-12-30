@@ -98,6 +98,16 @@ function stopLoaderAnimation() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  // Only show logo and text during loading
+  const logoBar = document.querySelector('.logo-bar');
+  const heroSection = document.querySelector('.hero-section');
+  const footerBar = document.querySelector('.footer-bar');
+  const scrollHint = document.getElementById('scrollHint');
+  if (logoBar) logoBar.style.display = '';
+  if (heroSection) heroSection.style.display = 'none';
+  if (footerBar) footerBar.style.display = 'none';
+  if (scrollHint) scrollHint.style.display = 'none';
+
   startLoaderAnimation();
   setTimeout(() => {
     const hint = document.getElementById('scrollHint');
@@ -116,6 +126,10 @@ window.addEventListener('DOMContentLoaded', () => {
       loader.classList.add('hide');
       loader.style.display = 'none'; // Instantly hide
     }
+    // Show rest of UI after loading
+    if (heroSection) heroSection.style.display = '';
+    if (footerBar) footerBar.style.display = '';
+    if (scrollHint) scrollHint.style.display = '';
   });
 });
 
@@ -139,6 +153,141 @@ function allImagesLoaded(callback) {
         loaded++;
         if (loaded === imgs.length) callback();
       });
+    }
+  });
+}
+
+// --- Waitlist Button Loader & Visit Tracking ---
+const queueCount = document.getElementById('queueCount');
+const loader = document.getElementById('pageLoader');
+
+// 1. Generate or retrieve visit_id from localStorage
+function getOrCreateVisitId() {
+  let visit_id = localStorage.getItem('drape_visit_id');
+  if (!visit_id) {
+    visit_id = crypto.randomUUID();
+    localStorage.setItem('drape_visit_id', visit_id);
+  }
+  window.DRAPE_VISIT_ID = visit_id;
+  return visit_id;
+}
+
+// 2. Parse UTM params from URL
+function getUTMParams() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    utm_source: params.get('utm_source') || '',
+    utm_medium: params.get('utm_medium') || '',
+    utm_campaign: params.get('utm_campaign') || '',
+    utm_term: params.get('utm_term') || '',
+    utm_content: params.get('utm_content') || '',
+    referrer: document.referrer || ''
+  };
+}
+
+// 3. Get User-Agent
+const user_agent = navigator.userAgent;
+
+// 4. Get IP (via backend proxy to avoid CORS issues)
+async function getIPGeo() {
+  try {
+    const res = await fetch('/api/geo');
+    if (!res.ok) throw new Error('Failed');
+    const data = await res.json();
+    return {
+      ip: data.ip || ''
+    };
+  } catch {
+    return { ip: '' };
+  }
+}
+
+// 5. Send to /api/visit and update button
+async function initWaitlistButton() {
+  const utms = getUTMParams();
+  const { ip } = await getIPGeo();
+  const payload = {
+    visit_id: getOrCreateVisitId(),
+    ...utms,
+    user_agent,
+    ip
+  };
+
+  let timeout;
+  let updated = false;
+
+  // Fallback after 2s
+  timeout = setTimeout(() => {
+    if (!updated) {
+      if (loader) loader.style.display = 'none';
+      if (queueCount) queueCount.textContent = '';
+      const btn = document.getElementById('joinWaitlistBtn');
+      if (btn) btn.innerHTML = 'Join Waitlist Now';
+    }
+  }, 2000);
+
+  try {
+    const res = await fetch('/api/visit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data && typeof data.waitlist_number === 'number') {
+      updated = true;
+      clearTimeout(timeout);
+      if (loader) loader.style.display = 'none';
+      if (queueCount) queueCount.textContent = data.waitlist_number;
+    }
+  } catch {
+    // fallback handled by timeout
+  }
+}
+
+window.addEventListener('DOMContentLoaded', initWaitlistButton);
+
+// --- Waitlist Form Submission ---
+const waitlistForm = document.getElementById('waitlistForm');
+const joinWaitlistBtn = document.getElementById('joinWaitlistBtn');
+
+if (waitlistForm) {
+  waitlistForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('modalEmail')?.value || '';
+    const phone = document.getElementById('modalPhone')?.value || '';
+    const country = document.getElementById('modalCountry')?.value || '';
+    const fullPhone = country ? `${country}-${phone}` : phone;
+    const user_agent = navigator.userAgent;
+    let ip = '';
+    try {
+      const geo = await getIPGeo();
+      ip = geo.ip;
+    } catch {}
+    const visit_id = getOrCreateVisitId();
+    const payload = {
+      visit_id,
+      email,
+      phone: fullPhone,
+      user_agent,
+      ip
+    };
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data && typeof data.waitlist_number === 'number') {
+        if (joinWaitlistBtn) joinWaitlistBtn.innerHTML = `<span class="number" id="queueCount">${data.waitlist_number}</span> Already in Waitlist, Click to Join`;
+      }
+    } catch {}
+    // Optionally show success message/modal here
+    const modalSuccess = document.getElementById('modalSuccess');
+    const modalFormSection = document.getElementById('modalFormSection');
+    if (modalSuccess && modalFormSection) {
+      modalFormSection.style.display = 'none';
+      modalSuccess.style.display = '';
     }
   });
 }
