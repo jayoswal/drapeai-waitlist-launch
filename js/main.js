@@ -2,20 +2,21 @@
 import { Snap } from "https://esm.sh/vevet@5";
 
 const imageFilenames = window.DRAPE_IMAGES || [];
-const carousel = document.getElementById('carousel');
+const carousel = document.getElementById("carousel");
 
-// Clear carousel
-carousel.innerHTML = '';
 
-// Dynamically create slide elements
-imageFilenames.forEach(filename => {
-  const slide = document.createElement('div');
-  slide.className = 'slide';
-  const img = document.createElement('img');
+carousel.innerHTML = "";
+
+
+imageFilenames.forEach((filename) => {
+  const slide = document.createElement("div");
+  slide.className = "slide";
+  slide.style.willChange = "transform"; 
+  const img = document.createElement("img");
   img.src = `assets/images/${filename}`;
   img.alt = filename;
   img.onerror = function () {
-    this.style.display = 'none';
+    this.style.display = "none";
   };
   slide.appendChild(img);
   carousel.appendChild(slide);
@@ -23,32 +24,129 @@ imageFilenames.forEach(filename => {
 
 const snap = new Snap({
   container: carousel,
-  direction: 'horizontal',
+  direction: "horizontal",
   grabCursor: true,
   centered: true,
   loop: true,
   gap: 3,
   freemode: false,
   slideToScroll: 1,
-  centered: true,
-  lerp: 0.1,
-  friction: 0.1,
-//   friction: 1,
-//   lerp: 1,
-//   edgeFriction: 1
+  lerp: 0.95, 
+  friction: 0.95, 
 });
 window.snap = snap;
 
-// Enable mouse wheel to control the slider directionally (using Snap's built-in wheel prop)
-snap.updateProps({
-  wheel: true,
-  wheelSpeed: 20, // adjust for natural feel
-  followWheel: false,
-  wheelThrottle: 100,
-  wheelAxis: 'x',
+
+let autoScrollTimer;
+const minInterval = 50; 
+const maxInterval = 2000;
+let currentInterval = minInterval;
+let spinStartTime = 0;
+let isIntroActive = true;
+let isInteracting = false;
+
+
+if (snap) {
+  snap.updateProps({
+    freemode: false,
+    friction: 0.95, 
+    lerp: 0.95, 
+    wheel: true,
+    wheelSpeed: 20,
+    followWheel: false,
+    wheelThrottle: 100,
+    wheelAxis: "x",
+  });
+}
+
+function scheduleNext() {
+  if (autoScrollTimer) clearTimeout(autoScrollTimer);
+
+  
+  if (isInteracting && !isIntroActive) return;
+
+
+  if (snap && typeof snap.next === "function") {
+    snap.next();
+  }
+
+ 
+  const now = Date.now();
+  const elapsed = now - spinStartTime;
+
+  if (elapsed < 2000) {
+    
+    currentInterval = minInterval;
+  } else {
+   
+    if (currentInterval < maxInterval) {
+      currentInterval *= 1.12; 
+      if (currentInterval >= maxInterval) {
+        currentInterval = maxInterval;
+        isIntroActive = false; 
+        if (snap) snap.updateProps({ friction: 0.25, lerp: 0.12 });
+      }
+    }
+  }      
+
+  autoScrollTimer = setTimeout(scheduleNext, currentInterval);
+}
+
+function startAutoScroll(reset = false) {
+  if (autoScrollTimer) clearTimeout(autoScrollTimer);
+  isInteracting = false;
+
+  if (reset) {
+    currentInterval = minInterval;
+    isIntroActive = true;
+    spinStartTime = Date.now();
+    // Ultra-smooth physics for intro
+    if (snap) snap.updateProps({ friction: 0.95, lerp: 0.95 });
+    console.log("DrapeAI: Starting Spin at interval", currentInterval);
+  }
+
+  // Start immediately with no delay
+  scheduleNext();
+}
+
+// Interaction Handlers
+function onInteractStart() {
+  if (isIntroActive) return;
+  isInteracting = true;
+  if (autoScrollTimer) clearTimeout(autoScrollTimer);
+}
+
+function onInteractEnd() {
+  if (isIntroActive) return;
+  isInteracting = false;
+  currentInterval = maxInterval; // Resume at steady speed
+  setTimeout(() => {
+    if (!isInteracting) startAutoScroll(false);
+  }, 500);
+}
+
+// Bind events
+if (carousel) {
+  carousel.addEventListener("mouseenter", onInteractStart);
+  carousel.addEventListener("mouseleave", onInteractEnd);
+  carousel.addEventListener("touchstart", onInteractStart);
+  carousel.addEventListener("touchend", onInteractEnd);
+}
+
+if (snap) {
+  snap.on("dragstart", onInteractStart);
+  snap.on("dragend", onInteractEnd);
+}
+
+// Start IMMEDIATELY after window load with minimal delay
+window.addEventListener("load", () => {
+  console.log("DrapeAI: Window loaded, starting spin...");
+  // Reduced delay from 150ms to 50ms for instant start
+  setTimeout(() => startAutoScroll(true), 50);
 });
 
-snap.on('update', () => {
+// 3D Transform Effect
+snap.on("update", () => {
   // Responsive 3D effect: more dramatic on small screens
   const isSmall = window.innerWidth < 600;
   const depth = isSmall ? 320 : 200;
@@ -61,12 +159,14 @@ snap.on('update', () => {
     const xOffset = progress * (size / 3) * factor;
     const zOffset = ((size * 0.5) / Math.sin(halfAngle)) * factor - depth;
     const rotateY = progress * rotation;
-    element.style.transform = `translateX(${coord + xOffset}px) translateZ(${zOffset}px) rotateY(${rotateY}deg)`;
+    element.style.transform = `translateX(${
+      coord + xOffset
+    }px) translateZ(${zOffset}px) rotateY(${rotateY}deg)`;
   });
 });
 
 // Loader SVG cycling logic
-const loaderIcon = document.getElementById('loaderIcon');
+const loaderIcon = document.getElementById("loaderIcon");
 const svgList = [
   `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera-icon lucide-camera"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>`,
   `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-film-icon lucide-film"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>`,
@@ -75,7 +175,7 @@ const svgList = [
   `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles-icon lucide-sparkles"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>`,
   `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-palette-icon lucide-palette"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg>`,
   `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scissors-icon lucide-scissors"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-person-standing-icon lucide-person-standing"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-person-standing-icon lucide-person-standing"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg>`,
 ];
 let svgIndex = 0;
 let loaderInterval = null;
@@ -97,59 +197,21 @@ function stopLoaderAnimation() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  // Only show logo and text during loading
-  const logoBar = document.querySelector('.logo-bar');
-  const heroSection = document.querySelector('.hero-section');
-  const footerBar = document.querySelector('.footer-bar');
-  const scrollHint = document.getElementById('scrollHint');
-  if (logoBar) logoBar.style.display = '';
-  if (heroSection) heroSection.style.display = 'none';
-  if (footerBar) footerBar.style.display = 'none';
-  if (scrollHint) scrollHint.style.display = 'none';
-
-  startLoaderAnimation();
-  setTimeout(() => {
-    const hint = document.getElementById('scrollHint');
-    if (hint) {
-      hint.style.opacity = '0';
-      hint.style.transition = 'opacity 1s';
-      setTimeout(() => { hint.style.display = 'none'; }, 1000);
-    }
-  }, 3200);
-
-  // Loader logic
-  allImagesLoaded(() => {
-    stopLoaderAnimation();
-    const loader = document.getElementById('pageLoader');
-    if (loader) {
-      loader.classList.add('hide');
-      loader.style.display = 'none'; // Instantly hide
-    }
-    // Show rest of UI after loading
-    if (heroSection) heroSection.style.display = '';
-    if (footerBar) footerBar.style.display = '';
-    if (scrollHint) scrollHint.style.display = '';
-  });
-});
-
-carousel.classList.add('ready');
-
-// Loader: Hide when all images are loaded and DOM is ready
+// Loader: Hide when all images are loaded
 function allImagesLoaded(callback) {
-  const imgs = carousel.querySelectorAll('img');
+  const imgs = carousel.querySelectorAll("img");
   let loaded = 0;
   if (imgs.length === 0) return callback();
-  imgs.forEach(img => {
+  imgs.forEach((img) => {
     if (img.complete && img.naturalWidth !== 0) {
       loaded++;
       if (loaded === imgs.length) callback();
     } else {
-      img.addEventListener('load', () => {
+      img.addEventListener("load", () => {
         loaded++;
         if (loaded === imgs.length) callback();
       });
-      img.addEventListener('error', () => {
+      img.addEventListener("error", () => {
         loaded++;
         if (loaded === imgs.length) callback();
       });
@@ -157,16 +219,59 @@ function allImagesLoaded(callback) {
   });
 }
 
+window.addEventListener("DOMContentLoaded", () => {
+  // Only show logo and text during loading
+  const logoBar = document.querySelector(".logo-bar");
+  const heroSection = document.querySelector(".hero-section");
+  const footerBar = document.querySelector(".footer-bar");
+  const scrollHint = document.getElementById("scrollHint");
+
+  if (logoBar) logoBar.style.display = "";
+  if (heroSection) heroSection.style.display = "none";
+  if (footerBar) footerBar.style.display = "none";
+  if (scrollHint) scrollHint.style.display = "none";
+
+  startLoaderAnimation();
+
+  // Hide scroll hint after 3.2s
+  setTimeout(() => {
+    const hint = document.getElementById("scrollHint");
+    if (hint) {
+      hint.style.opacity = "0";
+      hint.style.transition = "opacity 1s";
+      setTimeout(() => {
+        hint.style.display = "none";
+      }, 1000);
+    }
+  }, 3200);
+
+  // Loader logic
+  allImagesLoaded(() => {
+    stopLoaderAnimation();
+    const loader = document.getElementById("pageLoader");
+    if (loader) {
+      loader.classList.add("hide");
+      loader.style.display = "none";
+    }
+    // Show rest of UI after loading
+    if (heroSection) heroSection.style.display = "";
+    if (footerBar) footerBar.style.display = "";
+    if (scrollHint) scrollHint.style.display = "";
+  });
+});
+
+carousel.classList.add("ready");
+
 // --- Waitlist Button Loader & Visit Tracking ---
-const queueCount = document.getElementById('queueCount');
-const loader = document.getElementById('pageLoader');
+const queueCount = document.getElementById("queueCount");
+const loader = document.getElementById("pageLoader");
 
 // 1. Generate or retrieve visit_id from localStorage
 function getOrCreateVisitId() {
-  let visit_id = localStorage.getItem('drape_visit_id');
+  let visit_id = localStorage.getItem("drape_visit_id");
   if (!visit_id) {
     visit_id = crypto.randomUUID();
-    localStorage.setItem('drape_visit_id', visit_id);
+    localStorage.setItem("drape_visit_id", visit_id);
   }
   window.DRAPE_VISIT_ID = visit_id;
   return visit_id;
@@ -176,12 +281,12 @@ function getOrCreateVisitId() {
 function getUTMParams() {
   const params = new URLSearchParams(window.location.search);
   return {
-    utm_source: params.get('utm_source') || '',
-    utm_medium: params.get('utm_medium') || '',
-    utm_campaign: params.get('utm_campaign') || '',
-    utm_term: params.get('utm_term') || '',
-    utm_content: params.get('utm_content') || '',
-    referrer: document.referrer || ''
+    utm_source: params.get("utm_source") || "",
+    utm_medium: params.get("utm_medium") || "",
+    utm_campaign: params.get("utm_campaign") || "",
+    utm_term: params.get("utm_term") || "",
+    utm_content: params.get("utm_content") || "",
+    referrer: document.referrer || "",
   };
 }
 
@@ -191,14 +296,14 @@ const user_agent = navigator.userAgent;
 // 4. Get IP (via backend proxy to avoid CORS issues)
 async function getIPGeo() {
   try {
-    const res = await fetch('/api/geo');
-    if (!res.ok) throw new Error('Failed');
+    const res = await fetch("/api/geo");
+    if (!res.ok) throw new Error("Failed");
     const data = await res.json();
     return {
-      ip: data.ip || ''
+      ip: data.ip || "",
     };
   } catch {
-    return { ip: '' };
+    return { ip: "" };
   }
 }
 
@@ -210,7 +315,7 @@ async function initWaitlistButton() {
     visit_id: getOrCreateVisitId(),
     ...utms,
     user_agent,
-    ip
+    ip,
   };
 
   let timeout;
@@ -219,24 +324,24 @@ async function initWaitlistButton() {
   // Fallback after 2s
   timeout = setTimeout(() => {
     if (!updated) {
-      if (loader) loader.style.display = 'none';
-      if (queueCount) queueCount.textContent = '';
-      const btn = document.getElementById('joinWaitlistBtn');
-      if (btn) btn.innerHTML = 'Join Waitlist Now';
+      if (loader) loader.style.display = "none";
+      if (queueCount) queueCount.textContent = "";
+      const btn = document.getElementById("joinWaitlistBtn");
+      if (btn) btn.innerHTML = "Join Waitlist Now";
     }
   }, 2000);
 
   try {
-    const res = await fetch('/api/visit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+    const res = await fetch("/api/visit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
     const data = await res.json();
-    if (data && typeof data.waitlist_number === 'number') {
+    if (data && typeof data.waitlist_number === "number") {
       updated = true;
       clearTimeout(timeout);
-      if (loader) loader.style.display = 'none';
+      if (loader) loader.style.display = "none";
       if (queueCount) queueCount.textContent = data.waitlist_number;
     }
   } catch {
@@ -244,21 +349,21 @@ async function initWaitlistButton() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', initWaitlistButton);
+window.addEventListener("DOMContentLoaded", initWaitlistButton);
 
 // --- Waitlist Form Submission ---
-const waitlistForm = document.getElementById('waitlistForm');
-const joinWaitlistBtn = document.getElementById('joinWaitlistBtn');
+const waitlistForm = document.getElementById("waitlistForm");
+const joinWaitlistBtn = document.getElementById("joinWaitlistBtn");
 
 if (waitlistForm) {
-  waitlistForm.addEventListener('submit', async (e) => {
+  waitlistForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const email = document.getElementById('modalEmail')?.value || '';
-    const phone = document.getElementById('modalPhone')?.value || '';
-    const country = document.getElementById('modalCountry')?.value || '';
+    const email = document.getElementById("modalEmail")?.value || "";
+    const phone = document.getElementById("modalPhone")?.value || "";
+    const country = document.getElementById("modalCountry")?.value || "";
     const fullPhone = country ? `${country}-${phone}` : phone;
     const user_agent = navigator.userAgent;
-    let ip = '';
+    let ip = "";
     try {
       const geo = await getIPGeo();
       ip = geo.ip;
@@ -269,25 +374,26 @@ if (waitlistForm) {
       email,
       phone: fullPhone,
       user_agent,
-      ip
+      ip,
     };
     try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
-      if (data && typeof data.waitlist_number === 'number') {
-        if (joinWaitlistBtn) joinWaitlistBtn.innerHTML = `<span class="number" id="queueCount">${data.waitlist_number}</span> Already in Waitlist, Click to Join`;
+      if (data && typeof data.waitlist_number === "number") {
+        if (joinWaitlistBtn)
+          joinWaitlistBtn.innerHTML = `<span class="number" id="queueCount">${data.waitlist_number}</span> Already in Waitlist, Click to Join`;
       }
     } catch {}
-    // Optionally show success message/modal here
-    const modalSuccess = document.getElementById('modalSuccess');
-    const modalFormSection = document.getElementById('modalFormSection');
+    // Show success message/modal
+    const modalSuccess = document.getElementById("modalSuccess");
+    const modalFormSection = document.getElementById("modalFormSection");
     if (modalSuccess && modalFormSection) {
-      modalFormSection.style.display = 'none';
-      modalSuccess.style.display = '';
+      modalFormSection.style.display = "none";
+      modalSuccess.style.display = "";
     }
   });
 }
