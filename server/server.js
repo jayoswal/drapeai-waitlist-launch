@@ -59,6 +59,13 @@ app.get('/api/waitlist/count', (req, res) => {
   res.json({ waitlist_number: row.count });
 });
 
+// API: Geo IP (Mock/Basic)
+app.get('/api/geo', (req, res) => {
+  res.json({
+    ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1'
+  });
+});
+
 // API: Record a visit
 app.post('/api/visit', (req, res) => {
   const {
