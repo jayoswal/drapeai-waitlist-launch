@@ -28,11 +28,8 @@ const snap = new Snap({
   grabCursor: true,
   centered: true,
   loop: true,
-  gap: 3,
-  freemode: false,
-  slideToScroll: 1,
-  lerp: 0.95, 
-  friction: 0.95, 
+//   gap: 3,
+//   freemode: true,
 });
 window.snap = snap;
 
@@ -49,8 +46,8 @@ let isInteracting = false;
 if (snap) {
   snap.updateProps({
     freemode: false,
-    friction: 0.95, 
-    lerp: 0.95, 
+    friction: 0, 
+    lerp: 0, 
     wheel: true,
     wheelSpeed: 20,
     followWheel: false,
@@ -62,34 +59,26 @@ if (snap) {
 function scheduleNext() {
   if (autoScrollTimer) clearTimeout(autoScrollTimer);
 
-  
   if (isInteracting && !isIntroActive) return;
 
-
-  if (snap && typeof snap.next === "function") {
-    snap.next();
-  }
-
- 
   const now = Date.now();
   const elapsed = now - spinStartTime;
 
-  if (elapsed < 2000) {
-    
-    currentInterval = minInterval;
-  } else {
-   
-    if (currentInterval < maxInterval) {
-      currentInterval *= 1.12; 
-      if (currentInterval >= maxInterval) {
-        currentInterval = maxInterval;
-        isIntroActive = false; 
-        if (snap) snap.updateProps({ friction: 0.25, lerp: 0.12 });
-      }
+  if (elapsed < 4000) {
+    // Gradually increase interval (decrease speed) from 200ms to 0ms over 4s
+    if (snap && typeof snap.next === "function") {
+      snap.next();
     }
-  }      
-
-  autoScrollTimer = setTimeout(scheduleNext, currentInterval);
+    const minSpeed = 200; // slower initial speed
+    const maxSpeed = 0;   // end at 0ms (stops)
+    currentInterval = Math.max(maxSpeed, minSpeed + (elapsed / 4000) * (maxSpeed - minSpeed));
+    autoScrollTimer = setTimeout(scheduleNext, currentInterval);
+  } else {
+    // After intro: stop auto-scroll and set steady-state physics to 0
+    isIntroActive = false;
+    if (snap) snap.updateProps({ friction: 0, lerp: 0 }); // Steady state physics (no movement)
+    // Do not schedule further auto-scroll
+  }
 }
 
 function startAutoScroll(reset = false) {
@@ -101,7 +90,7 @@ function startAutoScroll(reset = false) {
     isIntroActive = true;
     spinStartTime = Date.now();
     // Ultra-smooth physics for intro
-    if (snap) snap.updateProps({ friction: 0.95, lerp: 0.95 });
+    if (snap) snap.updateProps({ friction: 0, lerp: 0 });
     console.log("DrapeAI: Starting Spin at interval", currentInterval);
   }
 
