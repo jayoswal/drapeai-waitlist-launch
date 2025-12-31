@@ -285,6 +285,13 @@ body {
 .modal-submit:hover {
   background: #868686;
 }
+.modal-submit:disabled {
+  background: #858585 !important;
+  color: #fff !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+  border: none;
+}
 .modal-success {
   font-family: 'Plus Jakarta Sans', Arial, sans-serif;
   color: #43423e;

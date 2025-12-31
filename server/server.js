@@ -105,6 +105,17 @@ app.post('/api/waitlist', (req, res) => {
   res.json({ waitlist_number: row ? row.count : 0 });
 });
 
+// API: Proxy for IP (no geo) using ipify
+app.get('/api/geo', async (req, res) => {
+  try {
+    const ipRes = await fetch('https://api.ipify.org?format=json');
+    const data = await ipRes.json();
+    res.json({ ip: data.ip });
+  } catch (e) {
+    res.json({ ip: '' });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

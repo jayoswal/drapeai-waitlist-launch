@@ -291,3 +291,88 @@ if (waitlistForm) {
     }
   });
 }
+
+// --- Waitlist Modal Button Enable/Disable Logic ---
+const modalEmail = document.getElementById('modalEmail');
+const modalPhone = document.getElementById('modalPhone');
+const modalSubmit = document.querySelector('.modal-submit');
+
+function validateModalForm() {
+  const email = modalEmail?.value.trim();
+  const phone = modalPhone?.value.trim();
+  // Basic validation: both fields non-empty and email contains @
+  const valid = email && email.includes('@') && phone && phone.length >= 10;
+  if (modalSubmit) modalSubmit.disabled = !valid;
+}
+
+if (modalEmail && modalPhone && modalSubmit) {
+  modalSubmit.disabled = true;
+  modalEmail.addEventListener('input', validateModalForm);
+  modalPhone.addEventListener('input', validateModalForm);
+}
+
+// --- Auto-scroll carousel on page load after images and waitlist_number are loaded ---
+function autoScrollCarousel() {
+  const carousel = document.getElementById('carousel');
+  if (!carousel) return;
+  let start = null;
+  const duration = 1200; // ms
+  const scrollAmount = carousel.scrollWidth / 3; // scroll by 1/3 of carousel width
+  const initialScroll = carousel.scrollLeft;
+  function step(ts) {
+    if (!start) start = ts;
+    const progress = Math.min((ts - start) / duration, 1);
+    carousel.scrollLeft = initialScroll + scrollAmount * progress;
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// Wait for images and waitlist_number, then auto-scroll
+function onImagesAndWaitlistLoaded(callback) {
+  let imagesLoaded = false;
+  let waitlistLoaded = false;
+  function check() {
+    if (imagesLoaded && waitlistLoaded) callback();
+  }
+  // Images
+  const imgs = document.querySelectorAll('#carousel img');
+  let loadedCount = 0;
+  if (imgs.length === 0) imagesLoaded = true;
+  imgs.forEach(img => {
+    if (img.complete) {
+      loadedCount++;
+      if (loadedCount === imgs.length) {
+        imagesLoaded = true;
+        check();
+      }
+    } else {
+      img.addEventListener('load', () => {
+        loadedCount++;
+        if (loadedCount === imgs.length) {
+          imagesLoaded = true;
+          check();
+        }
+      });
+      img.addEventListener('error', () => {
+        loadedCount++;
+        if (loadedCount === imgs.length) {
+          imagesLoaded = true;
+          check();
+        }
+      });
+    }
+  });
+  if (imgs.length === 0) check();
+  // Waitlist number
+  const origInitWaitlistButton = window.initWaitlistButton;
+  window.initWaitlistButton = async function() {
+    await origInitWaitlistButton();
+    waitlistLoaded = true;
+    check();
+  };
+}
+
+onImagesAndWaitlistLoaded(autoScrollCarousel);
