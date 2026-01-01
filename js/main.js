@@ -35,8 +35,8 @@ window.snap = snap;
 
 
 let autoScrollTimer;
-const minInterval = 50; 
-const maxInterval = 2000;
+const minInterval = 30; // Starting speed (fast)
+const maxInterval = 1000; // Ending speed (slow, coming to stop)
 let currentInterval = minInterval;
 let spinStartTime = 0;
 let isIntroActive = true;
@@ -46,8 +46,8 @@ let isInteracting = false;
 if (snap) {
   snap.updateProps({
     freemode: false,
-    friction: 0, 
-    lerp: 0, 
+    friction: 0.1, // Smooth friction for natural feel
+    lerp: 0.08, // Smooth interpolation
     wheel: true,
     wheelSpeed: 20,
     followWheel: false,
@@ -63,21 +63,42 @@ function scheduleNext() {
 
   const now = Date.now();
   const elapsed = now - spinStartTime;
+  const duration = 3000; // 3 seconds total duration
 
-  if (elapsed < 4000) {
-    // Gradually increase interval (decrease speed) from 200ms to 0ms over 4s
+  if (elapsed < duration) {
+    // Continue auto-scrolling for 3 seconds with 4-phase speed curve
     if (snap && typeof snap.next === "function") {
       snap.next();
     }
-    const minSpeed = 200; // slower initial speed
-    const maxSpeed = 0;   // end at 0ms (stops)
-    currentInterval = Math.max(maxSpeed, minSpeed + (elapsed / 4000) * (maxSpeed - minSpeed));
+    
+    // Four-phase speed curve:
+    // Phase 1: 0-1000ms → 50ms interval (fast)
+    // Phase 2: 1000ms-1500ms → 200ms interval (medium)
+    // Phase 3: 1500ms-2000ms → 500ms interval (slow)
+    // Phase 4: 2000ms-3000ms → smooth exponential slowdown (500ms → 1500ms)
+    
+    if (elapsed < 1000) {
+      // Phase 1: Fast (0-1000ms)
+      currentInterval = 50;
+    } else if (elapsed < 1500) {
+      // Phase 2: Medium (1000ms-1500ms)
+      currentInterval = 200;
+    } else if (elapsed < 2000) {
+      // Phase 3: Slow (1500ms-2000ms)
+      currentInterval = 500;
+    } else {
+      // Phase 4: Even slower with smooth exponential slowdown to stop (2000ms-3000ms)
+      const phaseProgress = (elapsed - 2000) / (3000 - 2000); // 0 to 1 over 1s
+      const exponentialProgress = Math.pow(phaseProgress, 3); // Cubic easing
+      currentInterval = 500 + (1500 - 500) * exponentialProgress; // 500ms → 1500ms
+    }
+    
     autoScrollTimer = setTimeout(scheduleNext, currentInterval);
   } else {
-    // After intro: stop auto-scroll and set steady-state physics to 0
+    // After 3 seconds: Stop auto-scroll completely (no steady phase)
     isIntroActive = false;
-    if (snap) snap.updateProps({ friction: 0, lerp: 0 }); // Steady state physics (no movement)
-    // Do not schedule further auto-scroll
+    console.log("DrapeAI: Auto-scroll complete, stopped.");
+    // Do not schedule further auto-scroll - carousel stops completely
   }
 }
 
@@ -89,9 +110,9 @@ function startAutoScroll(reset = false) {
     currentInterval = minInterval;
     isIntroActive = true;
     spinStartTime = Date.now();
-    // Ultra-smooth physics for intro
-    if (snap) snap.updateProps({ friction: 0, lerp: 0 });
-    console.log("DrapeAI: Starting Spin at interval", currentInterval);
+    // Smooth physics for intro
+    if (snap) snap.updateProps({ friction: 0.1, lerp: 0.08 });
+    console.log("DrapeAI: Starting 3-second smooth auto-scroll...");
   }
 
   // Start immediately with no delay
