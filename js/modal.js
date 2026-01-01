@@ -24,6 +24,100 @@ function closeModal() {
 
 openBtn.addEventListener('click', openModal);
 
+// Validate email field - only allow valid email characters
+const emailInput = document.getElementById('modalEmail');
+
+if (emailInput) {
+  // Allow only valid email characters on keypress
+  emailInput.addEventListener('keypress', (e) => {
+    const char = String.fromCharCode(e.which || e.keyCode);
+    // Allow: letters, numbers, @, ., -, _, +
+    const validEmailChars = /^[a-zA-Z0-9@.\-_+]$/;
+    
+    if (!validEmailChars.test(char)) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // Sanitize input - remove invalid characters
+  emailInput.addEventListener('input', (e) => {
+    const value = e.target.value;
+    // Remove any characters not valid in email addresses
+    const sanitized = value.replace(/[^a-zA-Z0-9@.\-_+]/g, '');
+    
+    if (value !== sanitized) {
+      e.target.value = sanitized;
+    }
+  });
+
+  // Visual feedback for valid/invalid email
+  emailInput.addEventListener('blur', (e) => {
+    const value = e.target.value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (value && !emailRegex.test(value)) {
+      emailInput.style.borderColor = '#ff6b6b';
+      emailInput.style.backgroundColor = '#fff5f5';
+    } else {
+      emailInput.style.borderColor = '';
+      emailInput.style.backgroundColor = '';
+    }
+  });
+
+  // Clear error styling on focus
+  emailInput.addEventListener('focus', (e) => {
+    emailInput.style.borderColor = '';
+    emailInput.style.backgroundColor = '';
+  });
+}
+
+// Validate mobile number field - only allow numeric input
+const phoneInput = document.getElementById('modalPhone');
+
+if (phoneInput) {
+  // Prevent non-numeric characters on keypress
+  phoneInput.addEventListener('keypress', (e) => {
+    // Allow only numbers (0-9)
+    const charCode = e.which || e.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // Remove non-numeric characters on paste or input
+  phoneInput.addEventListener('input', (e) => {
+    const value = e.target.value;
+    // Remove all non-numeric characters
+    const numericOnly = value.replace(/[^0-9]/g, '');
+    
+    // Update the input value if it was modified
+    if (value !== numericOnly) {
+      e.target.value = numericOnly;
+    }
+  });
+
+  // Prevent paste of non-numeric content
+  phoneInput.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+    const numericOnly = pastedText.replace(/[^0-9]/g, '');
+    
+    // Insert only numeric characters
+    const input = e.target;
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    const currentValue = input.value;
+    
+    input.value = currentValue.substring(0, start) + numericOnly + currentValue.substring(end);
+    
+    // Set cursor position after pasted content
+    const newPosition = start + numericOnly.length;
+    input.setSelectionRange(newPosition, newPosition);
+  });
+}
+
 // Close modal on overlay click (not content)
 modal.addEventListener('click', (e) => {
   if (e.target === modal) closeModal();

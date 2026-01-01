@@ -156,6 +156,7 @@ snap.on("update", () => {
 
 // Loader SVG cycling logic
 const loaderIcon = document.getElementById("loaderIcon");
+console.log("Loader script loaded, loaderIcon:", loaderIcon);
 const svgList = [
   `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera-icon lucide-camera"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>`,
   `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-film-icon lucide-film"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>`,
@@ -170,9 +171,14 @@ let svgIndex = 0;
 let loaderInterval = null;
 
 function startLoaderAnimation() {
-  if (!loaderIcon) return;
+  console.log("startLoaderAnimation called, loaderIcon:", loaderIcon);
+  if (!loaderIcon) {
+    console.error("loaderIcon not found!");
+    return;
+  }
   svgIndex = Math.floor(Math.random() * svgList.length);
   loaderIcon.innerHTML = svgList[svgIndex];
+  console.log("Initial SVG loaded, starting interval...");
   loaderInterval = setInterval(() => {
     svgIndex = (svgIndex + 1) % svgList.length;
     loaderIcon.innerHTML = svgList[svgIndex];
@@ -209,6 +215,7 @@ function allImagesLoaded(callback) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  console.log("DOMContentLoaded fired");
   // Only show logo and text during loading
   const logoBar = document.querySelector(".logo-bar");
   const heroSection = document.querySelector(".hero-section");
@@ -220,6 +227,7 @@ window.addEventListener("DOMContentLoaded", () => {
   if (footerBar) footerBar.style.display = "none";
   if (scrollHint) scrollHint.style.display = "none";
 
+  console.log("Starting loader animation...");
   startLoaderAnimation();
 
   // Hide scroll hint after 3.2s

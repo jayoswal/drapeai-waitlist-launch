@@ -45,30 +45,45 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKHBN8FK"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
-  <div id="pageLoader" class="page-loader">
-    <div id="loaderIcon" class="loader-icon"></div>
+  <div id="pageLoader" class="page-loader" style="display: flex;">
+    <div id="loaderIcon" class="loader-icon" style="display: flex;"></div>
   </div>
-  <!-- Logo Section -->
-  <div class="logo-bar">
-    <img src="DRAPEAI-LOGO-SVG.svg" alt="DrapeAI Logo" class="logo-svg" />
-    <span class="logo-text">DrapeAI</span>
-  </div>
-  <!-- Hero Section: Tagline + Button stacked vertically -->
-  <div class="hero-section">
-    <!-- Hero Slider Section -->
-    <div class="carousel" id="carousel">
-      <!-- Slides will be injected here by JS -->
+  
+  <!-- Immediate Loader Start - Inline Script -->
+  <script>
+    // Start loader animation immediately
+    (function() {
+      const loaderIcon = document.getElementById("loaderIcon");
+      const svgList = [
+        '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10v2.2l1.6 1"/><path d="m16.13 7.66-.81-4.05a2 2 0 0 0-2-1.61h-2.68a2 2 0 0 0-2 1.61l-.78 4.05"/><path d="m7.88 16.36.8 4a2 2 0 0 0 2 1.61h2.72a2 2 0 0 0 2-1.61l.81-4.05"/><circle cx="12" cy="12" r="6"/></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg>'
+      ];
+      let index = 0;
+      if (loaderIcon) {
+        loaderIcon.innerHTML = svgList[index];
+        setInterval(() => {
+          index = (index + 1) % svgList.length;
+          loaderIcon.innerHTML = svgList[index];
+        }, 200);
+      }
+    })();
+  </script>
+  
+  <!-- Main Container - Mobile First Flexbox Layout -->
+  <div class="main-container">
+    <!-- 1. Logo Section -->
+    <div class="logo-bar">
+      <img src="DRAPEAI-LOGO-SVG.svg" alt="DrapeAI Logo" class="logo-svg" />
+      <span class="logo-text">DrapeAI</span>
     </div>
-    <div class="tagline">
-      Studio Level Fashion Photoshoots in Minutes. Zero Production Cost.
-    </div>
-    <!-- Waitlist Button Section (Below Tagline) -->
-    <div class="button-section">
-      <button class="join-button" id="joinWaitlistBtn" type="button">
-        <span class="number" id="queueCount">54</span> Already in Waitlist, Click to Join
-      </button>
-    </div>
-    <!-- Scroll Hint Section -->
+    
+    <!-- 2. Scroll Hint Section -->
     <div class="scroll-hint" id="scrollHint" aria-label="Scroll the carousel: scroll or drag to view more images">
       <div class="arrows">
         <div class="left">&#8592;</div>
@@ -76,6 +91,23 @@
         <div class="right">&#8594;</div>
       </div>
       <div class="text">SCROLL TO VIEW MORE</div>
+    </div>
+    
+    <!-- 3. Hero Slider Section -->
+    <div class="carousel" id="carousel">
+      <!-- Slides will be injected here by JS -->
+    </div>
+    
+    <!-- 4. Tagline -->
+    <div class="tagline">
+      Studio Level Fashion Photoshoots in Minutes. Zero Production Cost.
+    </div>
+    
+    <!-- 5. Waitlist Button Section -->
+    <div class="button-section">
+      <button class="join-button" id="joinWaitlistBtn" type="button">
+        <span class="number" id="queueCount">54</span> Already in Waitlist, Click to Join
+      </button>
     </div>
   </div>
   <!-- Modal Structure for Waitlist Form -->
@@ -86,7 +118,7 @@
         <h2 class="modal-heading">Get Early Access</h2>
         <div class="modal-subheading">Studio Level Fashion Photoshoots in Minutes.</div>
         <form id="waitlistForm" autocomplete="off">
-          <input type="email" class="modal-input" id="modalEmail" placeholder="Enter your email" required />
+          <input type="email" class="modal-input" id="modalEmail" placeholder="Enter your email" inputmode="email" autocomplete="email" required />
           <div class="modal-phone-group">
             <select class="modal-country" id="modalCountry">
               <option value="IN" selected>🇮🇳 +91</option>
@@ -151,7 +183,7 @@
               <option value="CY">🇨🇾 +357</option>
               <option value="LI">🇱🇮 +423</option>
             </select>
-            <input type="tel" class="modal-input" id="modalPhone" placeholder="Enter mobile number" pattern="[0-9]{10,15}" required />
+            <input type="tel" class="modal-input" id="modalPhone" placeholder="Enter mobile number" pattern="[0-9]{10,15}" inputmode="numeric" required />
           </div>
           <button type="submit" class="modal-submit">Join the Waitlist</button>
         </form>
@@ -165,7 +197,7 @@
   </div>
   <footer class="footer-bar">
     <a href="#" class="contact-link" id="contactUsLink">Contact Us</a>
-    <span class="version-tag">v1.2.2</span>
+    <span class="version-tag">v2.0.0</span>
   </footer>
   <!-- Contact Modal -->
   <div class="modal-overlay" id="contactModal" style="display:none;">

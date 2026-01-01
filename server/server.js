@@ -59,11 +59,29 @@ app.get('/api/waitlist/count', (req, res) => {
   res.json({ waitlist_number: row.count });
 });
 
-// API: Geo IP (Mock/Basic)
-app.get('/api/geo', (req, res) => {
-  res.json({
-    ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1'
-  });
+// API: Get IP and Geo details from external service
+app.get('/api/geo', async (req, res) => {
+  try {
+    // Using ipapi.co for comprehensive IP and geo data
+    const ipRes = await fetch('https://ipapi.co/json/');
+    const data = await ipRes.json();
+    
+    // Return the complete response as a string
+    res.json({ 
+      ip: JSON.stringify(data),
+      raw: data // Also send raw for debugging if needed
+    });
+  } catch (e) {
+    console.error('Error fetching IP/Geo data:', e);
+    // Fallback: try to get basic IP from request headers
+    const fallbackIP = req.headers['x-forwarded-for'] || 
+                       req.headers['x-real-ip'] || 
+                       req.socket.remoteAddress || 
+                       'unknown';
+    res.json({ 
+      ip: JSON.stringify({ ip: fallbackIP, error: 'Could not fetch geo data' })
+    });
+  }
 });
 
 // API: Record a visit
@@ -110,17 +128,6 @@ app.post('/api/waitlist', (req, res) => {
   // Get updated waitlist number
   row = db.prepare('SELECT count FROM waitlist_number WHERE id = 1').get();
   res.json({ waitlist_number: row ? row.count : 0 });
-});
-
-// API: Proxy for IP (no geo) using ipify
-app.get('/api/geo', async (req, res) => {
-  try {
-    const ipRes = await fetch('https://api.ipify.org?format=json');
-    const data = await ipRes.json();
-    res.json({ ip: data.ip });
-  } catch (e) {
-    res.json({ ip: '' });
-  }
 });
 
 const PORT = process.env.PORT || 3000;

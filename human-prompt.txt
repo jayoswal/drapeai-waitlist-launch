@@ -124,6 +124,56 @@ Now I have a s3 bucket 'drapeai-wailist-launch-db' I want to copy the wailist.db
 add it in the document as well
 
 
+No need to reply, just understnad the placement of the items, we have four main items
+1. Logo svg + Logo text
+2. SCROLL TO VIEW MORE" hint text
+3. Image carosul (image slider)
+4. Tag Line
+5. Click to Join button.
+6. Contact Us
+
+Understand how th placement (from top/bottom is presently) its inefficient and not working across different viewport,
+we want mobile first responsiveness
+The sizing is so far correct and needs no changes but the placement is something we need to look at.
+
+So understand that, we do not want to hardcode for several viewport, it should be responsice in true sense.
+
+
+
+The correct order if items are (starting from top)
+Logo Bar
+Image Carousel
+Tagline
+Join Button
+-----
+Understand the project
+#file:assets #file:css #file:js #file:favicons #file:server #file:index.html 
+No need to reply, just understnad the placement of the items, we have four main items
+1. Logo svg + Logo text
+2. SCROLL TO VIEW MORE" hint text
+3. Image carosul (image slider)
+4. Tag Line
+5. Click to Join button.
+6. Contact Us
+
+Understand how th placement (from top/bottom is presently) its inefficient and not working across different viewport,
+we want mobile first responsiveness
+The sizing is so far correct and needs no changes but the placement is something we need to look at.
+The viewport should not be scrollable at all.
+We just have to tweak the placement of the elements
+So understand that, we do not want to hardcode for several viewport, it should be responsice in true sense.
+
+DONE---------
+Now lets work on placing the elemets one by one.
+Lets start with the Logo svg + Logo text (what is the current position)?
+we are only working with placement (vertically) of the elements
+
+Now the scroll for more helper text displays and after it disappears the image carousal moves up,
+I want the fixed position of image carousel irrespective the helper text,
+so tell me the current position of
+helper text
+image carouseal
+
 ----------------
 TODO: after success close , should the button text change to current queue number
 TODO: failure case for datasource external
