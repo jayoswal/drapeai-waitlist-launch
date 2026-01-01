@@ -1,7 +1,12 @@
 # IP and Geo-Location Data Format
 
 ## Overview
-The application now fetches comprehensive IP and geo-location data from **ipapi.co** and stores it as a JSON string in the `ip` field of both `visit_details` and `submission_details` tables.
+The application fetches the user's IP address from **ipify.org** and then retrieves comprehensive geo-location data from **ipapi.co** using that IP. The complete response is stored as a JSON string in the `ip` field of both `visit_details` and `submission_details` tables.
+
+## API Flow
+1. **Get IP**: Fetch public IP from `https://api.ipify.org?format=json`
+2. **Get Geo Data**: Use IP to fetch location data from `https://ipapi.co/{ip}/json/`
+3. **Store**: Complete geo-location response saved as JSON string
 
 ## Data Structure
 The complete response from ipapi.co includes the following fields (stored as JSON string):
@@ -118,11 +123,12 @@ Where IP is extracted from:
 4. `"unknown"` (if all else fails)
 
 ## Rate Limits
+- **ipify.org**: No rate limits (free service)
 - **ipapi.co free tier**: 1,000 requests per day
 - For production with high traffic, consider:
-  - Paid ipapi.co plan
+  - Paid ipapi.co plan (higher limits)
   - Alternative services (ipgeolocation.io, ip-api.com)
-  - Caching mechanism
+  - Caching mechanism to reduce API calls
 
 ## Privacy Considerations
 - Full IP and geo data is collected

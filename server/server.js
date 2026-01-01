@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS visit_details (
   referrer TEXT,
   user_agent TEXT,
   ip TEXT,
+  ip_details TEXT,
   created_at TEXT DEFAULT (datetime('now', 'localtime'))
 );
 
@@ -29,6 +30,7 @@ CREATE TABLE IF NOT EXISTS submission_details (
   phone TEXT,
   user_agent TEXT,
   ip TEXT,
+  ip_details TEXT,
   created_at TEXT DEFAULT (datetime('now', 'localtime'))
 );
 
@@ -62,14 +64,27 @@ app.get('/api/waitlist/count', (req, res) => {
 // API: Get IP and Geo details from external service
 app.get('/api/geo', async (req, res) => {
   try {
-    // Using ipapi.co for comprehensive IP and geo data
-    const ipRes = await fetch('https://ipapi.co/json/');
-    const data = await ipRes.json();
+    // Step 1: Get IP address from ipify.org
+    const ipRes = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipRes.json();
+    const userIP = ipData.ip; // This is the user's public IP
     
-    // Return the complete response as a string
+    // Step 2: Get geo-location details using the IP from ipapi.co
+    const geoEndpoint = `https://ipapi.co/${userIP}/json/`;
+    const geoRes = await fetch(geoEndpoint);
+    const geoData = await geoRes.json();
+    
+    // Structure ip_details with endpoint and response
+    const ipDetailsStructured = {
+      endpoint: geoEndpoint,
+      response: geoData
+    };
+    
+    // Return IP as plain string and ip_details as structured JSON
     res.json({ 
-      ip: JSON.stringify(data),
-      raw: data // Also send raw for debugging if needed
+      ip: userIP, // Just the IP address string
+      ip_details: JSON.stringify(ipDetailsStructured), // Structured with endpoint and response
+      raw: geoData // Also send raw for debugging if needed
     });
   } catch (e) {
     console.error('Error fetching IP/Geo data:', e);
@@ -78,8 +93,16 @@ app.get('/api/geo', async (req, res) => {
                        req.headers['x-real-ip'] || 
                        req.socket.remoteAddress || 
                        'unknown';
+    
+    // Structure fallback ip_details with endpoint and error response
+    const fallbackDetails = {
+      endpoint: 'fallback',
+      response: { ip: fallbackIP, error: 'Could not fetch geo data' }
+    };
+    
     res.json({ 
-      ip: JSON.stringify({ ip: fallbackIP, error: 'Could not fetch geo data' })
+      ip: fallbackIP,
+      ip_details: JSON.stringify(fallbackDetails)
     });
   }
 });
@@ -89,15 +112,15 @@ app.post('/api/visit', (req, res) => {
   const {
     visit_id,
     utm_source, utm_medium, utm_campaign, utm_term, utm_content,
-    referrer, user_agent, ip
+    referrer, user_agent, ip, ip_details
   } = req.body;
   db.prepare(`INSERT INTO visit_details (
     visit_id, utm_source, utm_medium, utm_campaign, utm_term, utm_content,
-    referrer, user_agent, ip
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    referrer, user_agent, ip, ip_details
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
     .run(
       visit_id, utm_source, utm_medium, utm_campaign, utm_term, utm_content,
-      referrer, user_agent, ip
+      referrer, user_agent, ip, ip_details
     );
   // Get current waitlist number
   const row = db.prepare('SELECT count FROM waitlist_number WHERE id = 1').get();
@@ -111,12 +134,13 @@ app.post('/api/waitlist', (req, res) => {
     email,
     phone,
     user_agent,
-    ip
+    ip,
+    ip_details
   } = req.body;
   db.prepare(`INSERT INTO submission_details (
-    visit_id, email, phone, user_agent, ip
-  ) VALUES (?, ?, ?, ?, ?)`)
-    .run(visit_id, email, phone, user_agent, ip);
+    visit_id, email, phone, user_agent, ip, ip_details
+  ) VALUES (?, ?, ?, ?, ?, ?)`)
+    .run(visit_id, email, phone, user_agent, ip, ip_details);
   // Ensure waitlist_number row exists
   let row = db.prepare('SELECT count FROM waitlist_number WHERE id = 1').get();
   if (!row) {

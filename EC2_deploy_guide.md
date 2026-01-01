@@ -133,6 +133,7 @@ To copy your `waitlist.db` file to your S3 bucket (`drapeai-wailist-launch-db`):
    (Run this command from the directory containing `waitlist.db`)
    ```sh
    aws s3 cp waitlist.db s3://drapeai-wailist-launch-db/<addnumber>
+   aws s3 cp waitlist.db s3://drapeai-wailist-launch-db/3/
    ```
 
 ---

@@ -174,6 +174,28 @@ so tell me the current position of
 helper text
 image carouseal
 
+DONE------------------
+
+
+Now instead of the hardocded px values for 6 elements placement (from top) and sizes
+I want to use the percentage system,
+start by mentioning all the current placement config (clamp as well if using it) and use some approximate percentage for placement only (from top) for all 6 elementsthen I can help in tweaking it as requried.
+
+
+Reason for this is for some viewport, the button and the footer Contact Us are overlapping
+
+------------------
+
+jayoswal@Jays-MacBook-Air server % lsof -ti:3000
+1067
+64090
+jayoswal@Jays-MacBook-Air server % sqlite3 waitlist.db "SELECT COUNT(*) FROM submission_detai
+ls;"
+0
+jayoswal@Jays-MacBook-Air server % sqlite3 waitlist.db "SELECT COUNT(*) FROM visit_details;"
+0
+jayoswal@Jays-MacBook-Air server % kill -9 1067 64090
+
 ----------------
 TODO: after success close , should the button text change to current queue number
 TODO: failure case for datasource external
@@ -185,6 +207,7 @@ TODO: Google tracking
 TODO: UTM
 
 TODO: onload scroll a bit =====
+TODO: security, disable right click, clear all consoloe logs
 
 TODO: Comment the code with scope to make changes
 TODO: optimize code

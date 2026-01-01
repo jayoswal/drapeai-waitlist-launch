@@ -290,7 +290,7 @@ function getUTMParams() {
 // 3. Get User-Agent
 const user_agent = navigator.userAgent;
 
-// 4. Get IP (via backend proxy to avoid CORS issues)
+// 4. Get IP and geo details (via backend proxy to avoid CORS issues)
 async function getIPGeo() {
   try {
     const res = await fetch("/api/geo");
@@ -298,21 +298,23 @@ async function getIPGeo() {
     const data = await res.json();
     return {
       ip: data.ip || "",
+      ip_details: data.ip_details || ""
     };
   } catch {
-    return { ip: "" };
+    return { ip: "", ip_details: "" };
   }
 }
 
 // 5. Send to /api/visit and update button
 async function initWaitlistButton() {
   const utms = getUTMParams();
-  const { ip } = await getIPGeo();
+  const { ip, ip_details } = await getIPGeo();
   const payload = {
     visit_id: getOrCreateVisitId(),
     ...utms,
     user_agent,
     ip,
+    ip_details,
   };
 
   let timeout;
@@ -350,6 +352,23 @@ window.addEventListener("DOMContentLoaded", initWaitlistButton);
 
 // --- Waitlist Form Submission ---
 const waitlistForm = document.getElementById("waitlistForm");
+// Country code to calling code mapping
+const countryCodeMap = {
+  'IN': '+91', 'US': '+1', 'GB': '+44', 'CA': '+1', 'AU': '+61',
+  'SG': '+65', 'DE': '+49', 'FR': '+33', 'IT': '+39', 'ES': '+34',
+  'CN': '+86', 'JP': '+81', 'BR': '+55', 'ZA': '+27', 'RU': '+7',
+  'MX': '+52', 'AE': '+971', 'KR': '+82', 'SA': '+966', 'ID': '+62',
+  'PK': '+92', 'BD': '+880', 'NG': '+234', 'EG': '+20', 'TR': '+90',
+  'TH': '+66', 'MY': '+60', 'PH': '+63', 'VN': '+84', 'UA': '+380',
+  'PL': '+48', 'AR': '+54', 'CO': '+57', 'CL': '+56', 'NZ': '+64',
+  'SE': '+46', 'NO': '+47', 'FI': '+358', 'DK': '+45', 'IE': '+353',
+  'CH': '+41', 'BE': '+32', 'NL': '+31', 'AT': '+43', 'GR': '+30',
+  'PT': '+351', 'CZ': '+420', 'HU': '+36', 'RO': '+40', 'SK': '+421',
+  'BG': '+359', 'HR': '+385', 'SI': '+386', 'LT': '+370', 'LV': '+371',
+  'EE': '+372', 'LU': '+352', 'IS': '+354', 'MT': '+356', 'CY': '+357',
+  'LI': '+423'
+};
+
 const joinWaitlistBtn = document.getElementById("joinWaitlistBtn");
 
 if (waitlistForm) {
@@ -357,21 +376,30 @@ if (waitlistForm) {
     e.preventDefault();
     const email = document.getElementById("modalEmail")?.value || "";
     const phone = document.getElementById("modalPhone")?.value || "";
-    const country = document.getElementById("modalCountry")?.value || "";
-    const fullPhone = country ? `${country}-${phone}` : phone;
+    const countryCode = document.getElementById("modalCountry")?.value || "";
+    
+    // Structure phone as JSON object
+    const phoneData = {
+      country_code: countryCodeMap[countryCode] || "+91",
+      phone: phone
+    };
+    
     const user_agent = navigator.userAgent;
     let ip = "";
+    let ip_details = "";
     try {
       const geo = await getIPGeo();
       ip = geo.ip;
+      ip_details = geo.ip_details;
     } catch {}
     const visit_id = getOrCreateVisitId();
     const payload = {
       visit_id,
       email,
-      phone: fullPhone,
+      phone: JSON.stringify(phoneData),
       user_agent,
       ip,
+      ip_details,
     };
     try {
       const res = await fetch("/api/waitlist", {
