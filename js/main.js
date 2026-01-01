@@ -127,6 +127,80 @@ if (snap) {
   snap.on("dragend", onInteractEnd);
 }
 
+// --- Hover-based Directional Scrolling (Desktop/Tablet with mouse only) ---
+const hoverScrollSpeed = 1200; // Interval in ms (lower = faster). Configurable for tweaking.
+let hoverScrollTimer = null;
+let currentHoverZone = null; // 'left', 'right', or null
+
+// Check if device supports hover (desktop/tablet with mouse/trackpad)
+const supportsHover = window.matchMedia('(hover: hover)').matches;
+
+if (supportsHover && carousel && snap) {
+  carousel.addEventListener('mousemove', (e) => {
+    // Skip if intro animation is active or user is actively dragging
+    if (isIntroActive) return;
+    
+    const rect = carousel.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const carouselWidth = rect.width;
+    const halfWidth = carouselWidth / 2;
+    
+    // Determine which zone: left or right
+    const newZone = mouseX < halfWidth ? 'left' : 'right';
+    
+    // Only restart timer if zone changed
+    if (newZone !== currentHoverZone) {
+      currentHoverZone = newZone;
+      
+      // Clear existing hover scroll timer
+      if (hoverScrollTimer) {
+        clearInterval(hoverScrollTimer);
+      }
+      
+      // Start hover-based scrolling
+      hoverScrollTimer = setInterval(() => {
+        if (currentHoverZone === 'right' && typeof snap.next === 'function') {
+          snap.next(); // Scroll forward (right to left)
+        } else if (currentHoverZone === 'left' && typeof snap.prev === 'function') {
+          snap.prev(); // Scroll backward (left to right)
+        }
+      }, hoverScrollSpeed);
+    }
+  });
+  
+  // Stop hover scrolling when mouse leaves carousel
+  carousel.addEventListener('mouseleave', () => {
+    if (hoverScrollTimer) {
+      clearInterval(hoverScrollTimer);
+      hoverScrollTimer = null;
+    }
+    currentHoverZone = null;
+  });
+}
+
+// Update scroll hint text based on device type and fade in/out timing
+const scrollHintText = document.querySelector('.scroll-hint .text');
+const scrollHintSection = document.getElementById('scrollHint');
+if (scrollHintText && scrollHintSection) {
+  // Set text based on device
+  if (supportsHover) {
+    scrollHintText.textContent = 'HOVER / DRAG TO VIEW MORE';
+  } else {
+    scrollHintText.textContent = 'DRAG TO VIEW MORE';
+  }
+  // Initially hide
+  scrollHintSection.style.opacity = '0';
+  scrollHintSection.style.transition = 'opacity 0.4s';
+  // Fade in after 500ms
+  setTimeout(() => {
+    scrollHintSection.style.opacity = '1';
+    // Fade out after 3s (total 3.5s after page load)
+    setTimeout(() => {
+      scrollHintSection.style.opacity = '0';
+    }, 3000);
+  }, 800);
+}
+
 // Start IMMEDIATELY after window load with minimal delay
 window.addEventListener("load", () => {
   console.log("DrapeAI: Window loaded, starting spin...");

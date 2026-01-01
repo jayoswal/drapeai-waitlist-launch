@@ -194,10 +194,28 @@ jayoswal@Jays-MacBook-Air server % kill -9 1067 64090
 
 
 DONE-----------------
+
+
+If I hover on the images (half right of carasoul, the slider should go from right to left at some speed)
+and vice versa
+(I think this would only be useful for user on desktop device, but anyways check it)
+
 If user is on mobile device:
 I want the scroll infro text from: SCROLL TO VIEW MORE to 'DRAG TO VIEW MORE'
 and if user is on dektop/pc device
 I want the scroll infro text from: SCROLL TO VIEW MORE to 'HOVER / DRAG TO VIEW MORE'
+
+DONE----------------
+
+currently the scrol helper text is coing from start and then disappears, insteasd I want it to be fade in after 500ms page load nad then disappear
+
+I want to make auto scroll more smooth:
+make it of 3 seconds:
+high->low speed -> coming to stop (maybe epxonential slowdown?)
+centered: true - Active slide is centered in viewport make it false for auto scroll (updateProps?)
+
+
+Remove Phase 2: Steady Auto-Scroll (After 4 seconds)
 
 ----------------
 TODO: after success close , should the button text change to current queue number

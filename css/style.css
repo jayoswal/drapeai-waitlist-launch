@@ -72,7 +72,7 @@ body {
   opacity: 0.5;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 600;
-  font-size: clamp(12px, 1vw, 16px);
+  font-size: clamp(10px, 1vw, 14px);
   color: #43423e;
   text-transform: uppercase;
   letter-spacing: 0.025em;
