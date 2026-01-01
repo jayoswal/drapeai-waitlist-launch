@@ -189,12 +189,15 @@ Reason for this is for some viewport, the button and the footer Contact Us are o
 jayoswal@Jays-MacBook-Air server % lsof -ti:3000
 1067
 64090
-jayoswal@Jays-MacBook-Air server % sqlite3 waitlist.db "SELECT COUNT(*) FROM submission_detai
-ls;"
-0
-jayoswal@Jays-MacBook-Air server % sqlite3 waitlist.db "SELECT COUNT(*) FROM visit_details;"
-0
+
 jayoswal@Jays-MacBook-Air server % kill -9 1067 64090
+
+
+DONE-----------------
+If user is on mobile device:
+I want the scroll infro text from: SCROLL TO VIEW MORE to 'DRAG TO VIEW MORE'
+and if user is on dektop/pc device
+I want the scroll infro text from: SCROLL TO VIEW MORE to 'HOVER / DRAG TO VIEW MORE'
 
 ----------------
 TODO: after success close , should the button text change to current queue number
@@ -212,4 +215,9 @@ TODO: security, disable right click, clear all consoloe logs
 TODO: Comment the code with scope to make changes
 TODO: optimize code
 https://vevetjs.com/docs/Snap/props
+
+TODO: dvh for placement
+TODO: dvh for sizing as well
+TODO: if on PC change the scroll info text for hover over toscroll & check if hover to scroll owrks
+TODO: make intitial intro auto scroll more smooth
 
