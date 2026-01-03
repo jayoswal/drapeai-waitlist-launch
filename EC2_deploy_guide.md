@@ -208,3 +208,34 @@ Whenever you push new changes to the GitHub repository, follow these steps on yo
 For help, contact the project maintainer: jayumeshoswal2001@gmail.com
 
 ---
+
+## 15. Cloudflare DNS Setup for A Records
+
+To ensure your domain is properly routed through Cloudflare and benefits from CDN and security features, add the following A records in your Cloudflare DNS settings:
+
+1. **Log in to your Cloudflare dashboard** at [https://dash.cloudflare.com/](https://dash.cloudflare.com/) and select your domain (`drapeai.in`).
+
+2. **Go to the DNS tab.**
+
+3. **Add or update these A records:**
+
+   - **A Record for root domain:**
+     - Type: `A`
+     - Name: `@`
+     - IPv4 address: *(your EC2 public IP address)*
+     - Proxy status: **Proxied** (orange cloud)
+
+   - **A Record for www subdomain:**
+     - Type: `A`
+     - Name: `www`
+     - IPv4 address: *(your EC2 public IP address)*
+     - Proxy status: **Proxied** (orange cloud)
+
+4. **Save the records.**
+
+5. **Wait for DNS propagation** (usually a few minutes, but can take up to 24 hours).
+
+**Note:**  
+The Cloudflare account email used is: `clickonova.faylawson@gmail.com`
+
+---

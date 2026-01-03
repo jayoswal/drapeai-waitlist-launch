@@ -238,4 +238,4 @@ TODO: dvh for placement
 TODO: dvh for sizing as well
 TODO: if on PC change the scroll info text for hover over toscroll & check if hover to scroll owrks
 TODO: make intitial intro auto scroll more smooth
-
+TODO: add deive? mobile or PC into DB

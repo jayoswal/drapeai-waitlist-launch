@@ -13,7 +13,7 @@ imageFilenames.forEach((filename) => {
   slide.className = "slide";
   slide.style.willChange = "transform"; 
   const img = document.createElement("img");
-  img.src = `assets/images/${filename}`;
+  img.src = filename;
   img.alt = filename;
   img.onerror = function () {
     this.style.display = "none";
@@ -97,7 +97,6 @@ function scheduleNext() {
   } else {
     // After 3 seconds: Stop auto-scroll completely (no steady phase)
     isIntroActive = false;
-    console.log("DrapeAI: Auto-scroll complete, stopped.");
     // Do not schedule further auto-scroll - carousel stops completely
   }
 }
@@ -112,7 +111,6 @@ function startAutoScroll(reset = false) {
     spinStartTime = Date.now();
     // Smooth physics for intro
     if (snap) snap.updateProps({ friction: 0.1, lerp: 0.08 });
-    console.log("DrapeAI: Starting 3-second smooth auto-scroll...");
   }
 
   // Start immediately with no delay
@@ -224,7 +222,6 @@ if (scrollHintText && scrollHintSection) {
 
 // Start IMMEDIATELY after window load with minimal delay
 window.addEventListener("load", () => {
-  console.log("DrapeAI: Window loaded, starting spin...");
   // Reduced delay from 150ms to 50ms for instant start
   setTimeout(() => startAutoScroll(true), 50);
 });
@@ -251,7 +248,6 @@ snap.on("update", () => {
 
 // Loader SVG cycling logic
 const loaderIcon = document.getElementById("loaderIcon");
-console.log("Loader script loaded, loaderIcon:", loaderIcon);
 const svgList = [
   `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera-icon lucide-camera"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>`,
   `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-film-icon lucide-film"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/></svg>`,
@@ -266,14 +262,12 @@ let svgIndex = 0;
 let loaderInterval = null;
 
 function startLoaderAnimation() {
-  console.log("startLoaderAnimation called, loaderIcon:", loaderIcon);
   if (!loaderIcon) {
     console.error("loaderIcon not found!");
     return;
   }
   svgIndex = Math.floor(Math.random() * svgList.length);
   loaderIcon.innerHTML = svgList[svgIndex];
-  console.log("Initial SVG loaded, starting interval...");
   loaderInterval = setInterval(() => {
     svgIndex = (svgIndex + 1) % svgList.length;
     loaderIcon.innerHTML = svgList[svgIndex];
@@ -310,7 +304,6 @@ function allImagesLoaded(callback) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  console.log("DOMContentLoaded fired");
   // Only show logo and text during loading
   const logoBar = document.querySelector(".logo-bar");
   const heroSection = document.querySelector(".hero-section");
@@ -322,7 +315,6 @@ window.addEventListener("DOMContentLoaded", () => {
   if (footerBar) footerBar.style.display = "none";
   if (scrollHint) scrollHint.style.display = "none";
 
-  console.log("Starting loader animation...");
   startLoaderAnimation();
 
   // Hide scroll hint after 3.2s
@@ -602,3 +594,30 @@ function onImagesAndWaitlistLoaded(callback) {
 }
 
 onImagesAndWaitlistLoaded(autoScrollCarousel);
+
+// --- Security: Disable right-click/context menu ---
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+});
+
+// --- Security: Disable text and image selection ---
+document.addEventListener('DOMContentLoaded', function () {
+  document.body.style.userSelect = 'none';
+  document.querySelectorAll('img').forEach(function(img) {
+    img.style.userSelect = 'none';
+  });
+});
+
+// --- Security: Block DevTools keyboard shortcuts ---
+document.addEventListener('keydown', function(e) {
+  // F12, Ctrl+Shift+I/J/C/U, Cmd+Opt+I/J/C/U
+  if (
+    e.key === 'F12' ||
+    (e.ctrlKey && e.shiftKey && ['I', 'J', 'C', 'U'].includes(e.key.toUpperCase())) ||
+    (e.metaKey && e.altKey && ['I', 'J', 'C', 'U'].includes(e.key.toUpperCase()))
+  ) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+});

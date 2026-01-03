@@ -1,13 +1,13 @@
 window.DRAPE_IMAGES = [
-  "Group 365.png",
-  "Group 367.png",
-  "Group 375.png",
-  "Group 369.png",
-  "Group 372.png",
-  "Group 364.png",
-  "Group 370.png",
-  "Group 374.png",
-  "Group 368.png",
-  "Group 371.png",
-  "Group 373.png"
-];
+  "https://drapeai.in/assets/images/Group%20365.png",
+  "https://drapeai.in/assets/images/Group%20367.png",
+  "https://drapeai.in/assets/images/Group%20375.png",
+  "https://drapeai.in/assets/images/Group%20369.png",
+  "https://drapeai.in/assets/images/Group%20372.png",
+  "https://drapeai.in/assets/images/Group%20364.png",
+  "https://drapeai.in/assets/images/Group%20370.png",
+  "https://drapeai.in/assets/images/Group%20374.png",
+  "https://drapeai.in/assets/images/Group%20368.png",
+  "https://drapeai.in/assets/images/Group%20371.png",
+  "https://drapeai.in/assets/images/Group%20373.png"
+]
