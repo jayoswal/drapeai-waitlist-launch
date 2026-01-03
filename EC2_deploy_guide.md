@@ -239,3 +239,18 @@ To ensure your domain is properly routed through Cloudflare and benefits from CD
 The Cloudflare account email used is: `clickonova.faylawson@gmail.com`
 
 ---
+
+## 16. Cloudflare Caching Configuration & Purge
+
+To ensure your latest changes are served and old cache is cleared:
+
+1. Go to Cloudflare Caching Configuration for your domain:
+   [https://dash.cloudflare.com/90f624089b369a2ef5060b5f79ccde82/drapeai.in/caching/configuration](https://dash.cloudflare.com/90f624089b369a2ef5060b5f79ccde82/drapeai.in/caching/configuration)
+
+2. In the left sidebar, click **Caching** → **Configuration**.
+
+3. Click **Purge Everything** to clear all cached files and assets for your domain.
+
+This ensures all users get the latest version of your site and assets after deployment or updates.
+
+---
