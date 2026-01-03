@@ -154,6 +154,19 @@ app.post('/api/waitlist', (req, res) => {
   res.json({ waitlist_number: row ? row.count : 0 });
 });
 
+// Ensure ip_details column exists in visit_details
+try {
+  db.prepare('SELECT ip_details FROM visit_details LIMIT 1').get();
+} catch (e) {
+  db.exec('ALTER TABLE visit_details ADD COLUMN ip_details TEXT');
+}
+// Ensure ip_details column exists in submission_details
+try {
+  db.prepare('SELECT ip_details FROM submission_details LIMIT 1').get();
+} catch (e) {
+  db.exec('ALTER TABLE submission_details ADD COLUMN ip_details TEXT');
+}
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
