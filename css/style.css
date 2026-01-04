@@ -527,7 +527,7 @@ body {
 }
 .contact-modal-email a:hover,
 .contact-modal-phone a:hover {
-  color: #43423e;
+  color: #868686;
 }
 @media (max-width: 400px) {
   .footer-bar {
